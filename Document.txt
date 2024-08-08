@@ -1,0 +1,10 @@
+// Important thing before creating Category
+01- slug
+02- slug must be unique
+03- status
+04- auto generate slug 
+05- ajax response 
+06- category response
+07- error handdle
+08- Paginate
+

@@ -1,0 +1,57 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+
+class AdminLoginController extends Controller
+{
+    public function index() {
+        return view('admin.login');
+    }
+
+    public function authenticator(Request $request) {
+        $credentials = $request->validate([
+            'email' => 'required',
+            'password' => 'required',
+        ]); 
+
+        if (Auth::attempt($credentials)) {
+            return redirect()->route('admin.dashboard');
+        };
+    }
+
+    public function dashboard(){
+        return view('admin.dashboard');
+    }
+
+     public function category(){
+        return view('admin.category');
+    }
+     public function subcategory(){
+        return view('admin.subcategory');   
+    }
+     public function brands(){
+        return view('admin.brand');   
+    }
+     public function products(){
+        return view('admin.products');   
+    }
+     public function orders(){
+        return view('admin.orders');   
+    }
+     public function discounts(){
+        return view('admin.discounts');   
+    }
+     public function users(){
+        return view('admin.users');   
+    }
+     public function pages(){
+        return view('admin.pages');   
+    }
+
+
+};
