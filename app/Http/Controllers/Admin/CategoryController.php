@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -16,8 +17,9 @@ class CategoryController extends Controller
     public function index()
     {
 
-        $category_list = Category::all();
+        // $category_list = Category::all()::paginate(5);
 
+        $category_list = DB::table('category')->paginate(5);
         // Pass the data to the view using compact
         return view('admin.category.index', compact('category_list'));
         // return view("admin.category.index");
@@ -43,24 +45,26 @@ class CategoryController extends Controller
             'slug' => 'required|unique:category', // Assuming the table is 'categories'
         ]);
 
-        if ($validator->passes()) {
-            // Your logic here if validation passes
-            return response()->json([
-                'status' => true,
-                'message' => 'Validation passed',
-            ]);
-        } else {
-            return response()->json([
-                'status' => false,
-                'errors' => $validator->errors(),
-            ]);
-        }
+        // if ($validator->passes()) {
+        //     // Your logic here if validation passes
+        //     return response()->json([
+        //         'status' => true,
+        //         'message' => 'Validation passed',
+        //     ]);
+        // } else {
+        //     return response()->json([
+        //         'status' => false,
+        //         'errors' => $validator->errors(),
+        //     ]);
+        // }
 
         $data = new Category();
         $data->name = $request->name;
         $data->slug = $request->slug;
         $data->status = $request->status;
         $data->save();
+        
+        return redirect()->route('admin.category.index');
 
 
 
@@ -101,7 +105,7 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id, Request $request)
     {
         $category = Category::find($id);
         $category->delete();
@@ -118,6 +122,8 @@ class CategoryController extends Controller
         //         'message' => 'Category not found',
         //     ]);
         // }
+
+
         
     }
 }

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
 
 class AdminLoginController extends Controller
 {
@@ -34,12 +35,14 @@ class AdminLoginController extends Controller
      public function subcategory(){
         return view('admin.subcategory');   
     }
-     public function brands(){
-        return view('admin.brand');   
-    }
-     public function products(){
-        return view('admin.products');   
-    }
+    //  public function brands(){
+    //     $brands_list = DB::table('category')->paginate(3);
+    //     return view('admin.brands.index', compact('brands_list'));
+
+
+    //     // return view('admin.brands.index');   
+    // }
+     
      public function orders(){
         return view('admin.orders');   
     }
