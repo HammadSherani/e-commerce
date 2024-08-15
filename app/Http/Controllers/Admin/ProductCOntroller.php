@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 // use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ProductCOntroller extends Controller
@@ -13,9 +14,31 @@ class ProductCOntroller extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view("admin.products.index");
+
+        // Get the search value from the request
+        $search = $request['search'] ?? '';
+
+        // Perform the query with pagination
+        if(!empty($search)){
+            $product_list = DB::table('products')->where('name', '=', $search)->get();
+        }else {
+            $product_list = Product::all();
+        }
+        
+        return view("admin.products.index", compact('product_list', 'search'));
+        // $product_list = DB::table('products')->paginate(5);
+
+        // $search = $request->input('search');
+
+        // Perform the query with pagination
+        // $product_list  = Product::when($search, function ($query) use ($search) {
+        //     return $query->where('name', 'like', '%' . $search . '%')
+        //                  ->orWhere('email', 'like', '%' . $search . '%');
+        // })->paginate(5); // Adjust the number per page as needed
+
+        // return view('admin.products.index', compact('product_list', 'search'));
     }
 
     /**
