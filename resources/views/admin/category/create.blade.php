@@ -30,6 +30,7 @@
 							<div class="mb-3">
 								<label for="name">Name</label>
 								<input type="text" name="name" id="name" class="form-control" placeholder="Name">
+								<p></p>
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -70,16 +71,30 @@
 
 @section('customJs')
 <script>
-	$($categoryForm).submit(function(e) {
-		e.preventDefault();
-		$data = $(this).serialize();
+	$("#categoryForm").submit(function(e) {
+		// e.preventDefault();
+		// $data = $(this).serialize();
+		var element = $(this) 
 		$.ajax({
 			url: "{{ route('admin.category.store') }}",
 			type: "POST",
-			data: $data,
+			data: element.serializeArray(),
 			dataType: "json",
-			success: function(data) {
-				console.log(data);
+			success: function(res) {
+				var error = res['errors']
+				if (error['name']){
+					$("#name").addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors['name']);
+				}else {
+					$("#name").removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html();
+				}
+
+				if (error['slug']){
+					$("#slug").addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors['slug']);
+				}else {
+					$("#slug").removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html();
+				}
+			},error: function(jqXHR, exception) {
+				console.log("Something Went Wrong");
 			}
 		})
 	})

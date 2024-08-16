@@ -45,26 +45,34 @@ class CategoryController extends Controller
             'slug' => 'required|unique:category', // Assuming the table is 'categories'
         ]);
 
-        // if ($validator->passes()) {
-        //     // Your logic here if validation passes
-        //     return response()->json([
-        //         'status' => true,
-        //         'message' => 'Validation passed',
-        //     ]);
-        // } else {
-        //     return response()->json([
-        //         'status' => false,
-        //         'errors' => $validator->errors(),
-        //     ]);
-        // }
+        if ($validator->passes()) {
+            // Your logic here if validation passes
 
-        $data = new Category();
-        $data->name = $request->name;
-        $data->slug = $request->slug;
-        $data->status = $request->status;
-        $data->save();
+            $data = new Category();
+            $data->name = $request->name;
+            $data->slug = $request->slug;
+            $data->status = $request->status;
+            $data->save();
+
+            session()->flash('success', 'Your post has been created successfully!');
+
+            // return response()->json([
+            //     'status' => true,
+            //     'message' => 'Validation passed',
+            // ]);
+
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors(),
+            ]);
+        }
+
+
+        // return redirect()->route('admin.category.index');
+
+       
         
-        return redirect()->route('admin.category.index');
 
 
 

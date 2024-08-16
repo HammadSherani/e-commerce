@@ -20,7 +20,7 @@
 				<!-- Main content -->
 
 
-                {{$category_list}}	
+                <!-- {{$category_list}}	 -->
 				<section class="content">
 					<!-- Default box -->
 					<div class="container-fluid">
