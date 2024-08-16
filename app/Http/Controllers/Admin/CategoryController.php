@@ -19,7 +19,7 @@ class CategoryController extends Controller
 
         // $category_list = Category::all()::paginate(5);
 
-        $category_list = DB::table('category')->paginate(5);
+        $category_list = DB::table('category')->paginate(50);
         // Pass the data to the view using compact
         return view('admin.category.index', compact('category_list'));
         // return view("admin.category.index");
@@ -47,45 +47,51 @@ class CategoryController extends Controller
 
         if ($validator->passes()) {
             // Your logic here if validation passes
-
+            
             $data = new Category();
             $data->name = $request->name;
             $data->slug = $request->slug;
             $data->status = $request->status;
             $data->save();
-
-            session()->flash('success', 'Your post has been created successfully!');
-
+            
+            
+        }
+        
+        return redirect()->route('admin.category.index');
+        $request->session()->flash('success', 'Your post has been created successfully!');
+            
             // return response()->json([
             //     'status' => true,
             //     'message' => 'Validation passed',
             // ]);
 
-        } else {
-            return response()->json([
-                'status' => false,
-                'errors' => $validator->errors(),
-            ]);
-        }
 
-
-        // return redirect()->route('admin.category.index');
-
-       
+            
+        // } else {
+        //     return response()->json([
+        //         'status' => false,
+        //         'errors' => $validator->errors(),
+        //     ]);
+        // }
         
-
-
-
-
+        
+        // return redirect()->route('admin.category.index');
+        
+        
+        
+        
+        
+        
+        
         // $category_list = Category::all();
         // return redirect()->route('admin.category.index')->with('category_list', $category_list);
-
+        
         // $category_list  = Category->get();
         // return redirect()->route("admin.category.index" ,compact('category_list'));  
-
-
+        
+        
     }
-
+    
     /**
      * Display the specified resource.
      */
