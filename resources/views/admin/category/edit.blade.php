@@ -6,7 +6,7 @@
 	<div class="container-fluid my-2">
 		<div class="row mb-2">
 			<div class="col-sm-6">
-				<h1>Create Category</h1>
+				<h1>Update Category</h1>
 			</div>
 			<div class="col-sm-6 text-right">
 				<a href="{{ route('admin.category.index')}}" class="btn btn-primary">Back</a>
@@ -19,43 +19,41 @@
 <section class="content">
 	<!-- Default box -->
 	<div class="container-fluid">
-		<form action="{{ route('admin.category.store')}}" method="POST" name="categoryForm" id="categoryForm">
+		<form action="{{ route('admin.category.update')}}" method="POST" name="categoryForm" id="categoryForm">
 			@csrf
-
-			
 			<div class="card">
 				<div class="card-body">
 					<div class="row">
 						<div class="col-md-6">
 							<div class="mb-3">
 								<label for="name">Name</label>
-								<input type="text" name="name" id="name" class="form-control" placeholder="Name">
+								<input type="text" name="name" id="name" class="form-control" placeholder="Name" value="{{$category->name}}">
 								<p></p>
 							</div>	
 						</div>
 						<div class="col-md-6">
 							<div class="mb-3">
 								<label for="email">Slug</label>
-								<input type="text" name="slug" id="slug" class="form-control" placeholder="Slug" readonly>
+								<input type="text" name="slug" id="slug" class="form-control" placeholder="Slug" value="{{$category->slug}}" readonly>
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="mb-3">
 								<label for="status">Active</label>
 								<select name="status" id="status" class="form-control">
-									<option value="1">Active</option>
-									<option value="0">Block</option>
+									<option value="{{ ($category->status == 1) ? 'selected' : ''}}">Active</option>
+									<option value="{{ ($category->status == 0) ? 'selected' : ''}}">Block </option>
 								</select>
+                                
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="pb-5 pt-3">
-				<button class="btn btn-primary" type="submit">Create</button>
+				<button class="btn btn-primary" type="submit">Update</button>
 				<a href="{{ route('admin.brands')}}" class="btn btn-outline-dark ml-3">Cancel</a>
 			</div>
-		
 		</form>
 
 		@foreach ($errors->all('<p>:message</p>') as $input_error)
@@ -65,9 +63,7 @@
 	<!-- /.card -->
 </section>
 <!-- /.content -->
-
 @endsection
-
 
 @section('customJs')
 <script>
@@ -76,23 +72,18 @@
 		var element = $(this) 
 		$.ajax({
 			url: "{{ route('admin.category.store') }}",
-			type: "POST",
+			type: "put",
 			data: element.serializeArray(),
 			dataType: "json",
 			success: function(res) {
 				var error = res['errors'];
-
 				if (res['status'] == true){
-					
 					window.location.href = "{{ route('admin.category.index') }}";
-
 					$("#name").removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html();
 					$("#slug").removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html();
 				} else {
 					$("#name").addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors['name']);
 					$("#slug").addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors['slug']);
-
-
 				}
 			},error: function(jqXHR, exception) {
 				console.log("Something Went Wrong");
@@ -105,7 +96,7 @@
 		var element = $(this) 
 		$.ajax({
 			url: "{{ route('getSlug') }}",
-			type: "GET",
+			type: "get",
 			data: {name: element.val()},
 			dataType: "json",
 			success: function(res) { 

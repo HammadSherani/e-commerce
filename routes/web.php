@@ -6,7 +6,9 @@ use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\ProductCOntroller;
 use App\Http\Middleware\Adminauthenticator;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,14 +32,30 @@ Route::middleware([Adminauthenticator::class])->group(function () {
     Route::get('/admin/discounts',[AdminLoginController::class, 'discounts'])->name('admin.discounts');
     Route::get('/admin/users',[AdminLoginController::class, 'users'])->name('admin.users');
     Route::get('/admin/pages',[AdminLoginController::class, 'pages'])->name('admin.pages');
+
+    // Get Slug
     
+    Route::get('/getslug', function (Request $request) {
+        $slug = "";
+        if (!empty($request->name)) {
+            $slug = Str::slug($request->name); 
+        };
+
+        return response()->json([
+            "status" => true,
+            "slug" => $slug
+        ]);
+
+     })->name('getSlug');
     
     //Create category Route
     
     Route::get('admin/category/create',[CategoryController::class, 'create'])->name('admin.category.create');
     Route::post('admin/category/create',[CategoryController::class, 'store'])->name('admin.category.store');
     Route::get('/admin/category',[CategoryController::class, 'index'])->name('admin.category.index');
-    Route::delete('/admin/category/{categoty}/delete',[CategoryController::class, 'destroy'])->name('admin.category.destroy');
+    Route::get('/admin/category/{categoty}/delete',[CategoryController::class, 'destroy'])->name('admin.category.destroy');
+    Route::get('/admin/category/{categoty}/edit',[CategoryController::class, 'edit'])->name('admin.category.edit');
+    Route::put('/admin/category/{categoty}', [CategoryController::class, 'update'])->name('admin.category.update');
     
     
     

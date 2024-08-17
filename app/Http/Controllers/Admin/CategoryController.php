@@ -14,15 +14,21 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
 
         // $category_list = Category::all()::paginate(5);
+        $search = $request['table_search'] ?? '';
 
-        $category_list = DB::table('category')->paginate(50);
-        // Pass the data to the view using compact
-        return view('admin.category.index', compact('category_list'));
-        // return view("admin.category.index");
+        if (!empty($search)) {
+            $category_list = DB::table('category')->where('name', '=', $search)->get();
+        } else {
+            $category_list = Category::all();
+        }
+
+        $category_list = DB::table('category')->paginate(5);
+
+        return view('admin.category.index', compact('category_list', 'search'));
     }
 
     /**
@@ -47,51 +53,46 @@ class CategoryController extends Controller
 
         if ($validator->passes()) {
             // Your logic here if validation passes
-            
+
             $data = new Category();
             $data->name = $request->name;
             $data->slug = $request->slug;
             $data->status = $request->status;
             $data->save();
-            
-            
+
+            $request->session()->flash('success', 'Your post has been created successfully!');
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Validation passed',
+            ]);
         }
-        
-        return redirect()->route('admin.category.index');
-        $request->session()->flash('success', 'Your post has been created successfully!');
-            
-            // return response()->json([
-            //     'status' => true,
-            //     'message' => 'Validation passed',
-            // ]);
 
 
-            
-        // } else {
-        //     return response()->json([
-        //         'status' => false,
-        //         'errors' => $validator->errors(),
-        //     ]);
-        // }
-        
-        
+
+
+
+
+
+
+
         // return redirect()->route('admin.category.index');
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
         // $category_list = Category::all();
         // return redirect()->route('admin.category.index')->with('category_list', $category_list);
-        
+
         // $category_list  = Category->get();
         // return redirect()->route("admin.category.index" ,compact('category_list'));  
-        
-        
+
+
     }
-    
+
     /**
      * Display the specified resource.
      */
@@ -103,9 +104,17 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($categoryId, Request $request)
     {
-        //
+        $category = Category::find($categoryId);
+
+        if(empty($category)){
+        return redirect()->route('admin.category.index');
+
+        }else {
+
+        return view('admin.category.edit', compact('category'));
+        }
     }
 
     /**
@@ -113,31 +122,53 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $category = Category::find($id);
+
+        if(empty($category)){
+        return response()->json([
+            "status" => false,
+            'notFound' => true,
+            "message" => "Category not found",
+        ]);
+        };
+        
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'slug' => 'required|unique:category', // Assuming the table is 'categories'
+        ]);
+
+        if ($validator->passes()) {
+            // Your logic here if validation passes
+            
+            $data = new Category();
+            $data->name = $request->name;
+            $data->slug = $request->slug;
+            $data->status = $request->status;
+            $data->save();
+            
+            
+            return response()->json([
+                'status' => true,
+                'message' => 'Validation passed',
+            ]);
+        }
+        $request->session()->flash('success', 'Your post has been Updated successfully!');
+        return view('admin.category.edit', compact('category'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id, Request $request)
+    public function destroy($categoryId, Request $request)
     {
-        $category = Category::find($id);
+        // dd($categoryId);
+        $category = Category::find($categoryId);
         $category->delete();
 
-        // if ($category) {
-        //     $category->delete();
-        //     return response()->json([
-        //         'status' => true,
-        //         'message' => 'Category deleted successfully',
-        //     ]);
-        // } else {
-        //     return response()->json([
-        //         'status' => false,
-        //         'message' => 'Category not found',
-        //     ]);
-        // }
+        $request->session()->flash('success', 'Your post has been deleted successfully!');
+        return redirect()->route('admin.category.index');
 
 
-        
+
     }
 }
