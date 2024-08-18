@@ -105,7 +105,7 @@
 		var element = $(this) 
 		$.ajax({
 			url: "{{ route('getSlug') }}",
-			type: "GET",
+			type: "GET", 
 			data: {name: element.val()},
 			dataType: "json",
 			success: function(res) { 

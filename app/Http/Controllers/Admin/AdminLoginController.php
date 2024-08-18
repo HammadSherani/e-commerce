@@ -22,7 +22,11 @@ class AdminLoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             return redirect()->route('admin.dashboard');
-        };
+        }else {
+            // return back()->withErrors(['email' => 'Email Not Found']);
+            $request->session()->flash('error', 'Please Enter Correct Email and Password');
+             return redirect()->route('admin.login');
+        }
     }
 
     public function dashboard(){
@@ -32,9 +36,10 @@ class AdminLoginController extends Controller
      public function category(){
         return view('admin.category');
     }
-     public function subcategory(){
-        return view('admin.subcategory');   
-    }
+    //  public function subcategory(){
+    //     $category = Category::orderBy('Name', 'asc')->get();
+    //     return view('admin.subcategory');   
+    // }
     //  public function brands(){
     //     $brands_list = DB::table('category')->paginate(3);
     //     return view('admin.brands.index', compact('brands_list'));

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\BrandsController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\ProductCOntroller;
+use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Middleware\Adminauthenticator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,7 +28,6 @@ Route::post("/admin/login",[AdminLoginController::class, 'authenticator'])->name
 
 Route::middleware([Adminauthenticator::class])->group(function () {  
     Route::get('/admin/dashboard',[AdminLoginController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/admin/subcategory',[AdminLoginController::class, 'subcategory'])->name('admin.subcategory');
     Route::get('/admin/orders',[AdminLoginController::class, 'orders'])->name('admin.orders');
     Route::get('/admin/discounts',[AdminLoginController::class, 'discounts'])->name('admin.discounts');
     Route::get('/admin/users',[AdminLoginController::class, 'users'])->name('admin.users');
@@ -56,6 +56,7 @@ Route::middleware([Adminauthenticator::class])->group(function () {
     Route::get('/admin/category/{categoty}/delete',[CategoryController::class, 'destroy'])->name('admin.category.destroy');
     Route::get('/admin/category/{categoty}/edit',[CategoryController::class, 'edit'])->name('admin.category.edit');
     Route::put('/admin/category/{categoty}', [CategoryController::class, 'update'])->name('admin.category.update');
+    // Route::put('admin/category/{category}', 'CategoryController')->name('admin.category.update');
     
     
     
@@ -67,6 +68,12 @@ Route::middleware([Adminauthenticator::class])->group(function () {
 
     //brands
     Route::get('/admin/brands',[BrandsController::class, 'index'])->name('admin.brands');
+
+    // Sub Category
+    // Route::get('/admin/sub-category', [SubCategoryController::class, 'create'])->name('category.sub-category');
+    Route::get('/admin/subcategory',[SubCategoryController::class, 'create'])->name('admin.subcategory');
+    Route::get('/admin/subcategory',[SubCategoryController::class, 'store'])->name('admin.subcategory.store');
+
     
 });    
 

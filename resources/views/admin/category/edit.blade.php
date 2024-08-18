@@ -6,7 +6,7 @@
 	<div class="container-fluid my-2">
 		<div class="row mb-2">
 			<div class="col-sm-6">
-				<h1>Update Category</h1>
+				<h1>Edit Category</h1>
 			</div>
 			<div class="col-sm-6 text-right">
 				<a href="{{ route('admin.category.index')}}" class="btn btn-primary">Back</a>
@@ -19,7 +19,8 @@
 <section class="content">
 	<!-- Default box -->
 	<div class="container-fluid">
-		<form action="{{ route('admin.category.update')}}" method="POST" name="categoryForm" id="categoryForm">
+		
+		<form action="{{ route('admin.category.edit', $category->id)}}" method="POST" name="categoryForm" id="categoryForm">
 			@csrf
 			<div class="card">
 				<div class="card-body">
@@ -41,8 +42,8 @@
 							<div class="mb-3">
 								<label for="status">Active</label>
 								<select name="status" id="status" class="form-control">
-									<option value="{{ ($category->status == 1) ? 'selected' : ''}}">Active</option>
-									<option value="{{ ($category->status == 0) ? 'selected' : ''}}">Block </option>
+									<option value="1" {{ ($category->status == 1) ? 'selected' : ''}}>Active</option>
+									<option value="0" {{ ($category->status == 0) ? 'selected' : ''}}>Block </option>
 								</select>
                                 
 							</div>
@@ -71,7 +72,7 @@
 		e.preventDefault();
 		var element = $(this) 
 		$.ajax({
-			url: "{{ route('admin.category.store') }}",
+			url: "{{ route('admin.category.update', $category->id) }}",
 			type: "put",
 			data: element.serializeArray(),
 			dataType: "json",

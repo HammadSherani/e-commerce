@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class SubCategory extends Model
 {
-    protected $table =  "products";
+    protected $table =  "sub_category";
     protected $primaryKey =  "id";
-    protected $fillable =  ["name", "price", "status", "qty", "sku", "img"];
+    protected $fillable =  ["name", "slug", "status"];
     use HasFactory;
 }

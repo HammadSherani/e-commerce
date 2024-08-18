@@ -19,7 +19,7 @@ class Adminauthenticator
        if(Auth::check()){
            return $next($request);
        }else {
-           return redirect()->route('admin.login');
+        return redirect('/admin/login')->withErrors('You do not have access to the admin panel.'); 
        }
     }
 }

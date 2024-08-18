@@ -120,7 +120,7 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
         $category = Category::find($id);
 
@@ -140,11 +140,10 @@ class CategoryController extends Controller
         if ($validator->passes()) {
             // Your logic here if validation passes
             
-            $data = new Category();
-            $data->name = $request->name;
-            $data->slug = $request->slug;
-            $data->status = $request->status;
-            $data->save();
+            $category->name = $request->name;
+            $category->slug = $request->slug;
+            $category->status = $request->status;
+            $category->save();
             
             
             return response()->json([
@@ -152,8 +151,11 @@ class CategoryController extends Controller
                 'message' => 'Validation passed',
             ]);
         }
-        $request->session()->flash('success', 'Your post has been Updated successfully!');
-        return view('admin.category.edit', compact('category'));
+        // return view('admin.category.edit', compact('category'));
+        // $request->session()->flash('success', 'Your post has been Updated successfully!');
+
+
+        // echo "update";
     }
 
     /**
